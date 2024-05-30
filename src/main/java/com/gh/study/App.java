@@ -156,14 +156,66 @@ public class App {
 
             System.out.println("===== success! =====");
 
+            //userList
             for(Integer no : userModelMap.keySet()) {
                 UserModel user = userModelMap.get(no);
                 System.out.printf("%d | %s | %s | %s\n", user.getUserNo(), user.getUserId(), user.getUserPw(), user.getUserNickname());
             }
         } else if(cmd.equals("/usr/login")) {
             System.out.println("===== login! =====");
-        } else if(cmd.equals("/usr/edit_profile")) {
-            System.out.println("===== edit profile! =====");
+
+            String userId;
+            String userPw;
+            int key_userId = 0;
+
+            while(true) {
+                System.out.print("ID) ");
+                userId = scanner.nextLine();
+
+                if(userId.equals("/home")) {
+                    System.out.println("===== home! =====");
+                    break;
+                }
+
+                boolean hasId = false;
+
+                for(Integer no : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(no);
+
+                    if(userId.equals(user.getUserId())) {
+                        hasId = true;
+                        key_userId = user.getUserNo();
+                        break;
+                    }
+                }
+
+                if(hasId) {
+                    while(true) {
+                        System.out.print("PASSWORD) ");
+                        userPw = scanner.nextLine();
+
+                        if(userPw.equals("/home")) {
+                            System.out.println("===== home! =====");
+                            return;
+                        }
+
+                        UserModel user = userModelMap.get(key_userId);
+                        String checkPw = user.getUserPw();
+
+                        if(userPw.equals(checkPw)) {
+                            System.out.println("===== success! =====");
+                            break;
+                        } else {
+                            System.out.println("===== failed! =====");
+                        }
+                    }
+                    break;
+                } else {
+                    System.out.println("===== non-existent ID! ===== ");
+                }
+            }
+        } else if(cmd.equals("/usr/modify")) {
+            System.out.println("===== modify! =====");
         } else if(cmd.equals("/usr/logout")) {
             System.out.println("===== logout! =====");
         } else if(cmd.equals("/app/exit")) {
