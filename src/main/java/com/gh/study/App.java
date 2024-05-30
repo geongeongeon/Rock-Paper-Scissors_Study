@@ -10,6 +10,8 @@ import static com.gh.study.container.Container.scanner;
 
 public class App {
     Map<Integer, UserModel> userModelMap = new HashMap<>();
+    boolean isLogin = false; //로그인 상태
+    UserModel loginUser = null; //로그인한 유저 정보
 
     int userNo = 0;
 
@@ -166,7 +168,7 @@ public class App {
 
             String userId;
             String userPw;
-            int key_userId = 0;
+            int key_loginUser = 0;
 
             while(true) {
                 System.out.print("ID) ");
@@ -184,7 +186,7 @@ public class App {
 
                     if(userId.equals(user.getUserId())) {
                         hasId = true;
-                        key_userId = user.getUserNo();
+                        key_loginUser = user.getUserNo();
                         break;
                     }
                 }
@@ -199,11 +201,14 @@ public class App {
                             return;
                         }
 
-                        UserModel user = userModelMap.get(key_userId);
+                        UserModel user = userModelMap.get(key_loginUser);
                         String checkPw = user.getUserPw();
 
                         if(userPw.equals(checkPw)) {
                             System.out.println("===== success! =====");
+                            isLogin = true;
+                            loginUser = userModelMap.get(key_loginUser);
+                            System.out.println(loginUser);
                             break;
                         } else {
                             System.out.println("===== failed! =====");
@@ -217,7 +222,13 @@ public class App {
         } else if(cmd.equals("/usr/modify")) {
             System.out.println("===== modify! =====");
         } else if(cmd.equals("/usr/logout")) {
-            System.out.println("===== logout! =====");
+            if(!isLogin) {
+                System.out.println("===== login first! =====");
+            } else {
+                System.out.println("===== logout! =====");
+                isLogin = false;
+                loginUser = null;
+            }
         } else if(cmd.equals("/app/exit")) {
             System.out.print("===== exit! =====");
             scanner.close();

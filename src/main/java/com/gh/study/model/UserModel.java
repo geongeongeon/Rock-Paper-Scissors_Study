@@ -44,4 +44,9 @@ public class UserModel {
     public void setUserNickname(String userNickname) {
         this.userNickname = userNickname;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%d | %s | %s | %s", userNo, userId, userPw, userNickname);
+    }
 }
