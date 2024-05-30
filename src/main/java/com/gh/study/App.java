@@ -82,7 +82,7 @@ public class App {
                     System.out.println("===== stop! =====");
                     break;
                 } else {
-                    System.out.println("===== check your choice! =====");
+                    System.out.println("===== unknown choice! =====");
                 }
 
             }
@@ -95,8 +95,26 @@ public class App {
             String userPw;
             String userNickname;
 
-            System.out.print("ID) ");
-            userId = scanner.nextLine();
+            while(true) {
+                System.out.print("ID) ");
+                userId = scanner.nextLine();
+
+                boolean hasId = false;
+
+                for(Integer no : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(no);
+                    if(userId.equals(user.getUserId())) {
+                        hasId = true;
+                        break;
+                    }
+                }
+
+                if(hasId) {
+                    System.out.println("===== ID is already existent! =====");
+                } else {
+                    break;
+                }
+            }
 
             while(true) {
                 System.out.print("PASSWORD) ");
@@ -108,12 +126,30 @@ public class App {
                 if(userPw.equals(check_userPw)) {
                     break;
                 } else {
-                    System.out.println("===== password does not match! =====");
+                    System.out.println("===== PASSWORD does not match! =====");
                 }
             }
 
-            System.out.print("NICKNAME) ");
-            userNickname = scanner.nextLine();
+            while(true) {
+                System.out.print("NICKNAME) ");
+                userNickname = scanner.nextLine();
+
+                boolean hasNickname = false;
+
+                for(Integer no : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(no);
+                    if(userNickname.equals(user.getUserNickname())) {
+                        hasNickname = true;
+                        break;
+                    }
+                }
+
+                if(hasNickname) {
+                    System.out.println("===== NICKNAME is already existent! =====");
+                } else {
+                    break;
+                }
+            }
 
             UserModel userModel = new UserModel(++userNo, userId, userPw, userNickname);
             userModelMap.put(userNo, userModel);
