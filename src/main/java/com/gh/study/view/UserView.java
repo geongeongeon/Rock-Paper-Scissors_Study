@@ -67,45 +67,31 @@ public class UserView {
 
         String userId;
         String userPw;
-        int key_loginUser = 0;
 
         while(true) {
             System.out.print("ID) ");
             userId = scanner.nextLine();
 
-            if(userId.equals("/home")) {
-                System.out.println("===== home! =====");
+            if(checkHomeCommand(userId)) {
                 break;
             }
 
-            boolean hasId = false;
+            Integer key_loginUser = loginController.checkHasIdAndGetKey(userId);
 
-            for(Integer userNo : userModelMap.keySet()) {
-                UserModel user = userModelMap.get(userNo);
-
-                if(userId.equals(user.getUserId())) {
-                    hasId = true;
-                    key_loginUser = user.getUserNo();
-                    break;
-                }
-            }
-
-            if(hasId) {
+            if(key_loginUser != null) {
                 while(true) {
                     System.out.print("PASSWORD) ");
                     userPw = scanner.nextLine();
 
-                    if(userPw.equals("/home")) {
-                        System.out.println("===== home! =====");
-                        return;
+                    if(checkHomeCommand(userPw)) {
+                        break;
                     }
 
-                    UserModel user = userModelMap.get(key_loginUser);
-                    String checkPw = user.getUserPw();
+                    String checkPw = loginController.getKeyLoginUserPw(key_loginUser);
+                    boolean checkEqualPw = loginController.checkEqualPw(userPw, checkPw);
 
-                    if(userPw.equals(checkPw)) {
-                        UserSession.setIsLogin(true);
-                        UserSession.setLoginUser(userModelMap.get(key_loginUser));
+                    if(checkEqualPw) {
+                        loginController.changeSession(key_loginUser);
 
                         System.out.println("===== success! =====");
                         break;
@@ -235,5 +221,13 @@ public class UserView {
             UserModel user = userModelMap.get(userNo);
             System.out.printf("%d | %s | %s | %s\n", user.getUserNo(), user.getUserId(), user.getUserPw(), user.getUserNickname());
         }
+    }
+
+    private boolean checkHomeCommand(String input) {
+        if(input.equals("/home")) {
+            System.out.println("===== home! =====");
+            return true;
+        }
+        return false;
     }
 }
