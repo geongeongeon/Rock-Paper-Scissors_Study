@@ -1,5 +1,6 @@
 package com.gh.study;
 
+import com.gh.study.factory.TestDataFactory;
 import com.gh.study.model.UserModel;
 
 import java.util.HashMap;
@@ -8,19 +9,21 @@ import java.util.Map;
 import static com.gh.study.container.Container.*;
 
 public class App {
-    int userNo;
+    int userNextNo;
     static boolean isLogin;
     static UserModel loginUser;
 
     public App() {
-        //테스트 회원 데이터 생성
-        for(int i = 1; i <= 9; i ++) {
-            UserModel userModel = new UserModel(++userNo, "testId" + i, "testPw" + i, "testNickname" + i);
-            userModelMap.put(userNo, userModel);
-        }
+        loadTestData();
 
         isLogin = true; //로그인 상태
         loginUser = userModelMap.get(4); //로그인한 유저 정보
+    }
+
+    private void loadTestData() {
+       TestDataFactory testDataFactory = new TestDataFactory();
+       testDataFactory.makeTestUser();
+       userNextNo = testDataFactory.getUserLastNo() + 1;
     }
 
     public void run() {
@@ -52,8 +55,8 @@ public class App {
 
                 boolean hasId = false;
 
-                for(Integer no : userModelMap.keySet()) {
-                    UserModel user = userModelMap.get(no);
+                for(Integer userNo : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(userNo);
                     if(userId.equals(user.getUserId())) {
                         hasId = true;
                         break;
@@ -88,8 +91,8 @@ public class App {
 
                 boolean hasNickname = false;
 
-                for(Integer no : userModelMap.keySet()) {
-                    UserModel user = userModelMap.get(no);
+                for(Integer userNo : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(userNo);
                     if(userNickname.equals(user.getUserNickname())) {
                         hasNickname = true;
                         break;
@@ -102,9 +105,9 @@ public class App {
                     break;
                 }
             }
-
-            UserModel userModel = new UserModel(++userNo, userId, userPw, userNickname);
-            userModelMap.put(userNo, userModel);
+            UserModel userModel = new UserModel(userNextNo, userId, userPw, userNickname);
+            userModelMap.put(userNextNo, userModel);
+            userNextNo++;
 
             System.out.println("===== success! =====");
         } else if(cmd.equals("/usr/login")) {
@@ -125,8 +128,8 @@ public class App {
 
                 boolean hasId = false;
 
-                for(Integer no : userModelMap.keySet()) {
-                    UserModel user = userModelMap.get(no);
+                for(Integer userNo : userModelMap.keySet()) {
+                    UserModel user = userModelMap.get(userNo);
 
                     if(userId.equals(user.getUserId())) {
                         hasId = true;
@@ -223,8 +226,8 @@ public class App {
 
                                     boolean hasNewNickname = false;
 
-                                    for(Integer no : userModelMap.keySet()) {
-                                        UserModel user = userModelMap.get(no);
+                                    for(Integer userNo : userModelMap.keySet()) {
+                                        UserModel user = userModelMap.get(userNo);
                                         if(newNickname.equals(user.getUserNickname())) {
                                             hasNewNickname = true;
                                         }
@@ -261,8 +264,8 @@ public class App {
                 loginUser = null;
             }
         } else if(cmd.equals("/usr/list")) {
-            for(Integer no : userModelMap.keySet()) {
-                UserModel user = userModelMap.get(no);
+            for(Integer userNo : userModelMap.keySet()) {
+                UserModel user = userModelMap.get(userNo);
                 System.out.printf("%d | %s | %s | %s\n", user.getUserNo(), user.getUserId(), user.getUserPw(), user.getUserNickname());
             }
         } else if(cmd.equals("/app/exit")) {
