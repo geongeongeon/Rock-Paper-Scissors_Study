@@ -3,6 +3,7 @@ package com.gh.study.container;
 import com.gh.study.controller.GameController;
 import com.gh.study.controller.UserController;
 import com.gh.study.model.UserModel;
+import com.gh.study.session.UserSession;
 import com.gh.study.view.GameView;
 import com.gh.study.view.UserView;
 

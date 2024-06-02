@@ -23,4 +23,14 @@ public class GameView {
             }
         }
     }
+
+    public void gameRanking() {
+        System.out.println("===== ranking! =====");
+    }
+
+    public void gameExit() {
+        System.out.print("===== exit! =====");
+        scanner.close();
+        System.exit(0);
+    }
 }
