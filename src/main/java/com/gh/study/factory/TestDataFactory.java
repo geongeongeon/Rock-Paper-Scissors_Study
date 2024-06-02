@@ -11,6 +11,10 @@ public class TestDataFactory {
         return userLastNo;
     }
 
+    public void makeTestGame() {
+
+    }
+
     public void makeTestUser() {
         for (int i = 1; i <= 9; i++) {
             UserModel userModel = new UserModel(++userLastNo, "testId" + i, "testPw" + i, "testNickname" + i);

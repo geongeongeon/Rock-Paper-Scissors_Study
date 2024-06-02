@@ -1,8 +1,8 @@
-package com.gh.study.controller;
+package com.gh.study.game_controller;
 
 import static com.gh.study.container.Container.random;
 
-public class GameController {
+public class StartController {
     public String[] gameResult(String userChoice) {
         String computerChoice = getComputerChoice();
         String gameResult = getGameResult(userChoice, computerChoice);

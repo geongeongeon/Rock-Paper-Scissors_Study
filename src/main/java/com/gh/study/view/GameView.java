@@ -11,7 +11,7 @@ public class GameView {
             String userChoice = scanner.nextLine();
 
             if(userChoice.equals("rock") || userChoice.equals("scissor") || userChoice.equals("paper")) {
-                String[] gameResult = gameController.gameResult(userChoice);
+                String[] gameResult = startController.gameResult(userChoice);
 
                 System.out.println("computer) " + gameResult[0]);
                 System.out.printf("===== %s! =====\n", gameResult[1]);
@@ -30,7 +30,6 @@ public class GameView {
 
     public void gameExit() {
         System.out.print("===== exit! =====");
-        scanner.close();
-        System.exit(0);
+        exitController.gameExit();
     }
 }
