@@ -5,19 +5,14 @@ import com.gh.study.model.UserModel;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gh.study.container.Container.random;
-import static com.gh.study.container.Container.scanner;
+import static com.gh.study.container.Container.*;
 
 public class App {
-    static Map<Integer, UserModel> userModelMap;
+    int userNo;
     static boolean isLogin;
     static UserModel loginUser;
 
-    int userNo;
-
     public App() {
-        userModelMap = new HashMap<>();
-
         //테스트 회원 데이터 생성
         for(int i = 1; i <= 9; i ++) {
             UserModel userModel = new UserModel(++userNo, "testId" + i, "testPw" + i, "testNickname" + i);
@@ -26,8 +21,6 @@ public class App {
 
         isLogin = true; //로그인 상태
         loginUser = userModelMap.get(4); //로그인한 유저 정보
-
-        userNo = 0;
     }
 
     public void run() {
@@ -41,71 +34,12 @@ public class App {
 
     private void action(String cmd) {
         if(cmd.equals("/app/start")) {
-            System.out.println("===== start! =====");
-
-            while(true) {
-                System.out.print("you) ");
-                String yourChoice = scanner.nextLine();
-
-                int computerChoice = random.nextInt(3) + 1;
-
-                //1:rock 2:scissor 3:paper
-                if(yourChoice.equals("rock")) {
-                    switch(computerChoice) {
-                        case 1 :
-                            System.out.println("computer) rock");
-                            System.out.println("===== draw! =====");
-                            break;
-                        case 2 :
-                            System.out.println("computer) scissor");
-                            System.out.println("===== win! =====");
-                            break;
-                        case 3 :
-                            System.out.println("computer) paper");
-                            System.out.println("===== lose! =====");
-                            break;
-                    }
-                } else if(yourChoice.equals("scissor")) {
-                    switch(computerChoice) {
-                        case 1:
-                            System.out.println("computer) rock");
-                            System.out.println("===== lose! =====");
-                            break;
-                        case 2:
-                            System.out.println("computer) scissor");
-                            System.out.println("===== draw! =====");
-                            break;
-                        case 3:
-                            System.out.println("computer) paper");
-                            System.out.println("===== win! =====");
-                            break;
-                    }
-                } else if(yourChoice.equals("paper")) {
-                    switch(computerChoice) {
-                        case 1:
-                            System.out.println("computer) rock");
-                            System.out.println("===== win! =====");
-                            break;
-                        case 2:
-                            System.out.println("computer) scissor");
-                            System.out.println("===== lose! =====");
-                            break;
-                        case 3:
-                            System.out.println("computer) paper");
-                            System.out.println("===== draw! =====");
-                            break;
-                    }
-                } else if(yourChoice.equals("/stop")) {
-                    System.out.println("===== stop! =====");
-                    break;
-                } else {
-                    System.out.println("===== unknown choice! =====");
-                }
-
-            }
+            gameView.gameStart();
         } else if(cmd.equals("/app/ranking")) {
             System.out.println("===== ranking! =====");
         } else if(cmd.equals("/usr/join")) {
+            userView.userJoin();
+
             System.out.println("===== join! =====");
 
             String userId;
