@@ -1,14 +1,12 @@
 package com.gh.study.view;
 
-import com.gh.study.App;
 import com.gh.study.model.UserModel;
 import com.gh.study.session.UserSession;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gh.study.container.Container.scanner;
-import static com.gh.study.container.Container.userModelMap;
+import static com.gh.study.container.Container.*;
 
 public class UserView {
     public void userJoin() {
@@ -22,15 +20,7 @@ public class UserView {
             System.out.print("ID) ");
             userId = scanner.nextLine();
 
-            boolean hasId = false;
-
-            for(Integer userNo : userModelMap.keySet()) {
-                UserModel user = userModelMap.get(userNo);
-                if(userId.equals(user.getUserId())) {
-                    hasId = true;
-                    break;
-                }
-            }
+            boolean hasId = joinController.checkHasId(userId);
 
             if(hasId) {
                 System.out.println("===== ID is already existent! =====");
@@ -46,7 +36,9 @@ public class UserView {
             System.out.print("check PASSWORD) ");
             String check_userPw = scanner.nextLine();
 
-            if(userPw.equals(check_userPw)) {
+            boolean checkPw = joinController.checkEqualPw(userPw, check_userPw);
+
+            if(checkPw) {
                 break;
             } else {
                 System.out.println("===== PASSWORD does not match! =====");
@@ -57,15 +49,7 @@ public class UserView {
             System.out.print("NICKNAME) ");
             userNickname = scanner.nextLine();
 
-            boolean hasNickname = false;
-
-            for(Integer userNo : userModelMap.keySet()) {
-                UserModel user = userModelMap.get(userNo);
-                if(userNickname.equals(user.getUserNickname())) {
-                    hasNickname = true;
-                    break;
-                }
-            }
+            boolean hasNickname = joinController.checkHasNickname(userNickname);
 
             if(hasNickname) {
                 System.out.println("===== NICKNAME is already existent! =====");
@@ -73,12 +57,7 @@ public class UserView {
                 break;
             }
         }
-        int userNextNo = App.getUserNextNo();
-
-        UserModel userModel = new UserModel(userNextNo, userId, userPw, userNickname);
-        userModelMap.put(userNextNo, userModel);
-
-        App.setUserNextNo(++userNextNo);
+        joinController.join(userId, userPw, userNickname);
 
         System.out.println("===== success! =====");
     }
