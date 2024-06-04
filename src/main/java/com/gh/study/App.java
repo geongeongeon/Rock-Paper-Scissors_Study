@@ -18,9 +18,7 @@ public class App {
 
     public App() {
         loadTestData();
-
-        UserSession.setIsLogin(true); //로그인 상태
-        UserSession.setLoginUser(userModelMap.get(4)); //로그인한 유저 정보
+        UserSession.setLoginUser(userModelMap.get(4)); //자동으로 key가 4인 회원에 로그인
     }
 
     private void loadTestData() {
@@ -33,29 +31,29 @@ public class App {
         while(true) {
             System.out.print("command) ");
             String cmd = scanner.nextLine();
-
-            action(cmd);
+            rq.setCommand(cmd);
+            action();
         }
     }
 
-    private void action(String cmd) {
-        if(cmd.equals("/app/start")) {
+    private void action() {
+        if(rq.getUrlPath().equals("/app/start")) {
             gameView.gameStart();
-        } else if(cmd.equals("/app/ranking")) {
+        } else if(rq.getUrlPath().equals("/app/ranking")) {
             gameView.gameRanking();
-        } else if(cmd.equals("/usr/join")) {
+        } else if(rq.getUrlPath().equals("/usr/join")) {
             userView.userJoin();
-        } else if(cmd.equals("/usr/login")) {
+        } else if(rq.getUrlPath().equals("/usr/login")) {
             userView.userLogin();
-        } else if(cmd.equals("/usr/whoami")) {
+        } else if(rq.getUrlPath().equals("/usr/whoami")) {
             userView.userWhoami();
-        } else if(cmd.split("\\?", 2)[0].equals("/usr/modify")) {
-            userView.userModify(cmd);
-        } else if(cmd.equals("/usr/logout")) {
+        } else if(rq.getUrlPath().equals("/usr/modify")) {
+            userView.userModify();
+        } else if(rq.getUrlPath().equals("/usr/logout")) {
             userView.userLogout();
-        } else if(cmd.equals("/usr/list")) {
+        } else if(rq.getUrlPath().equals("/usr/list")) {
             userView.userList();
-        } else if(cmd.equals("/app/exit")) {
+        } else if(rq.getUrlPath().equals("/app/exit")) {
             gameView.gameExit();
         } else {
             System.out.println("===== unknown command! =====");

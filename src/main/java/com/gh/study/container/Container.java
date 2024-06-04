@@ -1,5 +1,6 @@
 package com.gh.study.container;
 
+import com.gh.study.Rq;
 import com.gh.study.game_controller.*;
 import com.gh.study.user_controller.*;
 import com.gh.study.model.UserModel;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 public class Container {
     public static Scanner scanner;
     public static Random random;
+    public static Rq rq;
     //뷰
     public static GameView gameView;
     public static UserView userView;
@@ -32,6 +34,7 @@ public class Container {
     static {
         scanner = new Scanner(System.in);
         random = new Random();
+        rq = new Rq();
         //뷰
         gameView = new GameView();
         userView = new UserView();

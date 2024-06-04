@@ -25,7 +25,6 @@ public class LoginController {
     }
 
     public void changeSession(Integer key_loginUser) {
-        UserSession.setIsLogin(true);
         UserSession.setLoginUser(userModelMap.get(key_loginUser));
     }
 

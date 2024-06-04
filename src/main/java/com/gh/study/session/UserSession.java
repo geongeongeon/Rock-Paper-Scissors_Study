@@ -6,12 +6,13 @@ public class UserSession {
     private static boolean isLogin;
     private static UserModel loginUser;
 
-    public static boolean getIsLogin() {
-        return isLogin;
+    static {
+        isLogin = false;
+        loginUser = null;
     }
 
-    public static void setIsLogin(boolean isLogin) {
-        UserSession.isLogin = isLogin;
+    public static boolean getIsLogin() {
+        return isLogin;
     }
 
     public static UserModel getLoginUser() {
@@ -20,5 +21,10 @@ public class UserSession {
 
     public static void setLoginUser(UserModel loginUser) {
         UserSession.loginUser = loginUser;
+        if(UserSession.loginUser != null) {
+            UserSession.isLogin = true;
+        } else {
+            UserSession.isLogin = false;
+        }
     }
 }

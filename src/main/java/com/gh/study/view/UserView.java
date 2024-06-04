@@ -12,6 +12,7 @@ import static com.gh.study.container.Container.*;
 public class UserView {
     UserModel loginUser;
 
+    //여기부터 명령어 별 메서드
     public void userJoin() {
         if(!isLogin()) {
             System.out.println("===== join! =====");
@@ -64,19 +65,9 @@ public class UserView {
         }
     }
 
-    public void userModify(String cmd) {
+    public void userModify() {
         if(isLogin()) {
-            String cmdSplit = cmd.split("\\?")[1];
-            String[] splitAnd = cmdSplit.split("&", 2);
-
-            Map<String, String> checkIdPwMap = new HashMap<>();
-
-            for(String param : splitAnd) {
-                String[] splitEqual = param.split("=", 2);
-                String key_checkIdPwMap = splitEqual[0];
-                String value_checkIdPwMap = splitEqual[1];
-                checkIdPwMap.put(key_checkIdPwMap, value_checkIdPwMap);
-            }
+            Map<String, String> checkIdPwMap = rq.getParams();
 
             boolean hasKey_id = false;
             boolean hasKey_pw = false;
@@ -88,10 +79,11 @@ public class UserView {
                     hasKey_pw = true;
                 }
             }
-            if(hasKey_id && hasKey_pw) {
-                System.out.println("===== modify! =====");
 
-                if(checkIdPwMap.get("id").equals(loginUser.getUserId()) && checkIdPwMap.get("pw").equals(loginUser.getUserPw())) {
+            if(hasKey_id && hasKey_pw) {
+                if(checkIdPwMap.get("id").equals(loginUser.getUserId()) &&
+                        checkIdPwMap.get("pw").equals(loginUser.getUserPw())) {
+                    System.out.println("===== modify! =====");
                     while(true) {
                         String whatChange = getUserInput("change");
 
@@ -131,7 +123,7 @@ public class UserView {
                                     break;
                                 }
                             }
-                        } else if(checkHomeCommand("/home")) {
+                        } else if(checkHomeCommand(whatChange)) {
                             return;
                         } else {
                             System.out.println("===== unknown command! =====");
@@ -164,6 +156,7 @@ public class UserView {
         }
     }
 
+    //여기부터 중복 제거를 위한 메서드
     private boolean isLogin() {
         if(UserSession.getIsLogin()) {
             loginUser = UserSession.getLoginUser();
