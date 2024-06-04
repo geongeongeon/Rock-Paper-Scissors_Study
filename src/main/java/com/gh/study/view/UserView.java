@@ -4,6 +4,7 @@ import com.gh.study.model.UserModel;
 import com.gh.study.session.UserSession;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.gh.study.container.Container.*;
@@ -150,16 +151,15 @@ public class UserView {
     public void userLogout() {
         if(isLogin()) {
             System.out.println("===== success! =====");
-            UserSession.setIsLogin(false);
-            UserSession.setLoginUser(null);
+            logoutController.setUserSession();
         } else {
             System.out.println("===== login first! =====");
         }
     }
 
     public void userList() {
-        for(Integer userNo : userModelMap.keySet()) {
-            UserModel user = userModelMap.get(userNo);
+        List<UserModel> userList = listController.getUserInfo();
+        for(UserModel user : userList) {
             System.out.printf("%d | %s | %s | %s\n", user.getUserNo(), user.getUserId(), user.getUserPw(), user.getUserNickname());
         }
     }

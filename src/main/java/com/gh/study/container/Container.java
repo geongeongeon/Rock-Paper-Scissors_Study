@@ -26,7 +26,6 @@ public class Container {
     public static LoginController loginController;
     public static LogoutController logoutController;
     public static ModifyController modifyController;
-    public static WhoamiController whoamiController;
 
     public static Map<Integer, UserModel> userModelMap;
 
@@ -46,7 +45,6 @@ public class Container {
         loginController = new LoginController();
         logoutController = new LogoutController();
         modifyController = new ModifyController();
-        whoamiController = new WhoamiController();
 
         userModelMap = new HashMap<>();
     }
