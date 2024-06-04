@@ -3,18 +3,15 @@ package com.gh.study.view;
 import com.gh.study.model.UserModel;
 import com.gh.study.session.UserSession;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.gh.study.container.Container.*;
 
 public class UserView {
-    UserModel loginUser;
-
     //여기부터 명령어 별 메서드
     public void userJoin() {
-        if(!isLogin()) {
+        if(!UserSession.getIsLogin()) {
             System.out.println("===== join! =====");
 
             String userId = getUserIdInput();
@@ -29,7 +26,7 @@ public class UserView {
     }
 
     public void userLogin() {
-        if(!isLogin()) {
+        if(!UserSession.getIsLogin()) {
             System.out.println("===== login! =====");
 
             while(true) {
@@ -58,32 +55,24 @@ public class UserView {
     }
 
     public void userWhoami() {
-        if(isLogin()) {
-            System.out.println(loginUser);
+        if(UserSession.getIsLogin()) {
+            System.out.println(UserSession.getLoginUser());
         } else {
             System.out.println("===== login first! =====");
         }
     }
 
     public void userModify() {
-        if(isLogin()) {
+        if(UserSession.getIsLogin()) {
             Map<String, String> checkIdPwMap = rq.getParams();
 
-            boolean hasKey_id = false;
-            boolean hasKey_pw = false;
+            boolean hasKey = modifyController.checkContainsKeyIdAndPw(checkIdPwMap);
 
-            for(String key : checkIdPwMap.keySet()) {
-                if(key.equals("id")) {
-                    hasKey_id = true;
-                } else if (key.equals("pw")) {
-                    hasKey_pw = true;
-                }
-            }
+            if(hasKey) {
 
-            if(hasKey_id && hasKey_pw) {
-                if(checkIdPwMap.get("id").equals(loginUser.getUserId()) &&
-                        checkIdPwMap.get("pw").equals(loginUser.getUserPw())) {
+                if(modifyController.checkEqualIdAndPw(checkIdPwMap)) {
                     System.out.println("===== modify! =====");
+
                     while(true) {
                         String whatChange = getUserInput("change");
 
@@ -96,7 +85,7 @@ public class UserView {
 
                                 if(newPassword.equals(check_newPassword)) {
                                     System.out.println("===== success! =====");
-                                    loginUser.setUserPw(newPassword);
+                                    UserSession.getLoginUser().setUserPw(newPassword);
                                     break;
                                 } else {
                                     System.out.println("===== PASSWORD does not match! =====");
@@ -119,7 +108,7 @@ public class UserView {
                                     System.out.println("===== NICKNAME does already existent! =====");
                                 } else {
                                     System.out.println("===== success! =====");
-                                    loginUser.setUserNickname(newNickname);
+                                    UserSession.getLoginUser().setUserNickname(newNickname);
                                     break;
                                 }
                             }
@@ -133,7 +122,7 @@ public class UserView {
                     System.out.println("===== ID or PASSWORD is not matched! ======");
                 }
             } else {
-                System.out.println("===== unknown command! =====");
+                System.out.println("===== need your ID and PASSWORD! =====");
             }
         } else {
             System.out.println("===== login first! =====");
@@ -141,7 +130,7 @@ public class UserView {
     }
 
     public void userLogout() {
-        if(isLogin()) {
+        if(UserSession.getIsLogin()) {
             System.out.println("===== success! =====");
             logoutController.setUserSession();
         } else {
@@ -157,16 +146,6 @@ public class UserView {
     }
 
     //여기부터 중복 제거를 위한 메서드
-    private boolean isLogin() {
-        if(UserSession.getIsLogin()) {
-            loginUser = UserSession.getLoginUser();
-            return true;
-        } else {
-            loginUser = null;
-            return false;
-        }
-    }
-
     private String getUserIdInput() {
         while (true) {
             String userId = getUserInput("ID");
