@@ -9,115 +9,62 @@ import java.util.Map;
 import static com.gh.study.container.Container.*;
 
 public class UserView {
+    UserModel loginUser;
+
     public void userJoin() {
-        System.out.println("===== join! =====");
+        if(!isLogin()) {
+            System.out.println("===== join! =====");
 
-        String userId;
-        String userPw;
-        String userNickname;
+            String userId = getUserIdInput();
+            String userPw = getUserPasswordInput();
+            String userNickname = getUserNicknameInput();
 
-        while(true) {
-            System.out.print("ID) ");
-            userId = scanner.nextLine();
-
-            boolean hasId = joinController.checkHasId(userId);
-
-            if(hasId) {
-                System.out.println("===== ID is already existent! =====");
-            } else {
-                break;
-            }
+            joinController.join(userId, userPw, userNickname);
+            System.out.println("===== success! =====");
+        } else {
+            System.out.println("===== logout first! =====");
         }
-
-        while(true) {
-            System.out.print("PASSWORD) ");
-            userPw = scanner.nextLine();
-
-            System.out.print("check PASSWORD) ");
-            String check_userPw = scanner.nextLine();
-
-            boolean checkPw = joinController.checkEqualPw(userPw, check_userPw);
-
-            if(checkPw) {
-                break;
-            } else {
-                System.out.println("===== PASSWORD does not match! =====");
-            }
-        }
-
-        while(true) {
-            System.out.print("NICKNAME) ");
-            userNickname = scanner.nextLine();
-
-            boolean hasNickname = joinController.checkHasNickname(userNickname);
-
-            if(hasNickname) {
-                System.out.println("===== NICKNAME is already existent! =====");
-            } else {
-                break;
-            }
-        }
-        joinController.join(userId, userPw, userNickname);
-
-        System.out.println("===== success! =====");
     }
 
     public void userLogin() {
-        System.out.println("===== login! =====");
+        if(!isLogin()) {
+            System.out.println("===== login! =====");
 
-        String userId;
-        String userPw;
+            while(true) {
+                String userId = getUserInput("ID");
 
-        while(true) {
-            System.out.print("ID) ");
-            userId = scanner.nextLine();
+                if(checkHomeCommand(userId)) {
+                    return;
+                }
 
-            if(checkHomeCommand(userId)) {
-                break;
-            }
+                Integer key_loginUser = loginController.checkHasIdAndGetKey(userId);
 
-            Integer key_loginUser = loginController.checkHasIdAndGetKey(userId);
-
-            if(key_loginUser != null) {
-                while(true) {
-                    System.out.print("PASSWORD) ");
-                    userPw = scanner.nextLine();
-
-                    if(checkHomeCommand(userPw)) {
-                        break;
-                    }
-
-                    String checkPw = loginController.getKeyLoginUserPw(key_loginUser);
-                    boolean checkEqualPw = loginController.checkEqualPw(userPw, checkPw);
-
-                    if(checkEqualPw) {
-                        loginController.changeSession(key_loginUser);
-
+                if(key_loginUser != null) {
+                    if(checkUserPw(key_loginUser)) {
                         System.out.println("===== success! =====");
                         break;
                     } else {
-                        System.out.println("===== failed! =====");
+                            System.out.println("===== failed! =====");
                     }
+                } else {
+                    System.out.println("===== non-existent ID! ===== ");
                 }
-                break;
-            } else {
-                System.out.println("===== non-existent ID! ===== ");
             }
+        } else {
+            System.out.println("===== logout first! =====");
         }
     }
 
     public void userWhoami() {
-        UserModel loginUser = UserSession.getLoginUser();
-        System.out.println(loginUser);
+        if(isLogin()) {
+            System.out.println(loginUser);
+        } else {
+            System.out.println("===== login first! =====");
+        }
     }
 
     public void userModify(String cmd) {
-        boolean isLogin = UserSession.getIsLogin();
-        UserModel loginUser = UserSession.getLoginUser();
-
-        if(!isLogin) {
-            System.out.println("===== login first! =====");
-        } else {
+        if(isLogin()) {
             String cmdSplit = cmd.split("\\?")[1];
             String[] splitAnd = cmdSplit.split("&", 2);
 
@@ -145,18 +92,14 @@ public class UserView {
 
                 if(checkIdPwMap.get("id").equals(loginUser.getUserId()) && checkIdPwMap.get("pw").equals(loginUser.getUserPw())) {
                     while(true) {
-                        System.out.print("change) ");
-                        String whatChange = scanner.nextLine();
+                        String whatChange = getUserInput("change");
 
                         if(whatChange.equals("id")) {
                             System.out.println("===== can't change ID! =====");
                         } else if(whatChange.equals("pw")) {
                             while(true) {
-                                System.out.print("new PASSWORD) ");
-                                String newPassword = scanner.nextLine();
-
-                                System.out.print("check new PASSWORD) ");
-                                String check_newPassword = scanner.nextLine();
+                                String newPassword = getUserInput("new PASSWORD");
+                                String check_newPassword = getUserInput("check new PASSWORD");
 
                                 if(newPassword.equals(check_newPassword)) {
                                     System.out.println("===== success! =====");
@@ -168,8 +111,7 @@ public class UserView {
                             }
                         } else if(whatChange.equals("nickname")) {
                             while(true) {
-                                System.out.print("new NICKNAME) ");
-                                String newNickname = scanner.nextLine();
+                                String newNickname = getUserInput("new NICKNAME");
 
                                 boolean hasNewNickname = false;
 
@@ -188,8 +130,7 @@ public class UserView {
                                     break;
                                 }
                             }
-                        } else if(whatChange.equals("/home")) {
-                            System.out.println("===== home! =====");
+                        } else if(checkHomeCommand("/home")) {
                             return;
                         } else {
                             System.out.println("===== unknown command! =====");
@@ -201,18 +142,18 @@ public class UserView {
             } else {
                 System.out.println("===== unknown command! =====");
             }
+        } else {
+            System.out.println("===== login first! =====");
         }
     }
 
     public void userLogout() {
-        boolean isLogin = UserSession.getIsLogin();
-        UserModel loginUser = UserSession.getLoginUser();
-        if(!isLogin) {
-            System.out.println("===== login first! =====");
-        } else {
+        if(isLogin()) {
             System.out.println("===== success! =====");
             UserSession.setIsLogin(false);
-            UserSession.setLoginUser(loginUser);
+            UserSession.setLoginUser(null);
+        } else {
+            System.out.println("===== login first! =====");
         }
     }
 
@@ -223,11 +164,83 @@ public class UserView {
         }
     }
 
+    private boolean isLogin() {
+        if(UserSession.getIsLogin()) {
+            loginUser = UserSession.getLoginUser();
+            return true;
+        } else {
+            loginUser = null;
+            return false;
+        }
+    }
+
+    private String getUserIdInput() {
+        while (true) {
+            String userId = getUserInput("ID");
+
+            if (joinController.checkHasId(userId)) {
+                System.out.println("===== ID is already existent! =====");
+            } else {
+                return userId;
+            }
+        }
+    }
+
+    private String getUserPasswordInput() {
+        while (true) {
+            String userPw = getUserInput("PASSWORD");
+            String check_userPw = getUserInput("check PASSWORD");
+
+            if (joinController.checkEqualPw(userPw, check_userPw)) {
+                return userPw;
+            } else {
+                System.out.println("===== PASSWORD does not match! =====");
+            }
+        }
+    }
+
+    private String getUserNicknameInput() {
+        while (true) {
+            String userNickname = getUserInput("NICKNAME");
+
+            if (joinController.checkHasNickname(userNickname)) {
+                System.out.println("===== NICKNAME is already existent! =====");
+            } else {
+                return userNickname;
+            }
+        }
+    }
+
+    private String getUserInput(String input) {
+        System.out.print(input + ") ");
+        return scanner.nextLine();
+    }
+
     private boolean checkHomeCommand(String input) {
-        if(input.equals("/home")) {
+        if (input.equals("/home")) {
             System.out.println("===== home! =====");
             return true;
         }
         return false;
+    }
+
+    private boolean checkUserPw(Integer key_loginUser) {
+        while(true) {
+            String userPw = getUserInput("PASSWORD");
+
+            if(checkHomeCommand(userPw)) {
+                return false;
+            }
+
+            String checkPw = loginController.getKeyLoginUserPw(key_loginUser);
+            boolean checkEqualPw = loginController.checkEqualPw(userPw, checkPw);
+
+            if(checkEqualPw) {
+                loginController.changeSession(key_loginUser);
+                return true;
+            } else {
+                System.out.println("===== PASSWORD does not match! =====");
+            }
+        }
     }
 }
