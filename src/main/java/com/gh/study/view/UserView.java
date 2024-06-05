@@ -63,69 +63,39 @@ public class UserView {
     }
 
     public void userModify() {
-        if(UserSession.getIsLogin()) {
-            Map<String, String> checkIdPwMap = rq.getParams();
-
-            boolean hasKey = modifyController.checkContainsKeyIdAndPw(checkIdPwMap);
-
-            if(hasKey) {
-
-                if(modifyController.checkEqualIdAndPw(checkIdPwMap)) {
-                    System.out.println("===== modify! =====");
-
-                    while(true) {
-                        String whatChange = getUserInput("change");
-
-                        if(whatChange.equals("id")) {
-                            System.out.println("===== can't change ID! =====");
-                        } else if(whatChange.equals("pw")) {
-                            while(true) {
-                                String newPassword = getUserInput("new PASSWORD");
-                                String check_newPassword = getUserInput("check new PASSWORD");
-
-                                if(newPassword.equals(check_newPassword)) {
-                                    System.out.println("===== success! =====");
-                                    UserSession.getLoginUser().setUserPw(newPassword);
-                                    break;
-                                } else {
-                                    System.out.println("===== PASSWORD does not match! =====");
-                                }
-                            }
-                        } else if(whatChange.equals("nickname")) {
-                            while(true) {
-                                String newNickname = getUserInput("new NICKNAME");
-
-                                boolean hasNewNickname = false;
-
-                                for(Integer userNo : userModelMap.keySet()) {
-                                    UserModel user = userModelMap.get(userNo);
-                                    if(newNickname.equals(user.getUserNickname())) {
-                                        hasNewNickname = true;
-                                    }
-                                }
-
-                                if(hasNewNickname) {
-                                    System.out.println("===== NICKNAME does already existent! =====");
-                                } else {
-                                    System.out.println("===== success! =====");
-                                    UserSession.getLoginUser().setUserNickname(newNickname);
-                                    break;
-                                }
-                            }
-                        } else if(checkHomeCommand(whatChange)) {
-                            return;
-                        } else {
-                            System.out.println("===== unknown command! =====");
-                        }
-                    }
-                } else {
-                    System.out.println("===== ID or PASSWORD is not matched! ======");
-                }
-            } else {
-                System.out.println("===== need your ID and PASSWORD! =====");
-            }
-        } else {
+        if (!UserSession.getIsLogin()) {
             System.out.println("===== login first! =====");
+            return;
+        }
+
+        Map<String, String> checkIdPwMap = rq.getParams();
+
+        if (!modifyController.checkContainsKeyIdAndPw(checkIdPwMap)) {
+            System.out.println("===== need your ID and PASSWORD! =====");
+            return;
+        }
+
+        if (!modifyController.checkEqualIdAndPw(checkIdPwMap)) {
+            System.out.println("===== ID or PASSWORD is not matched! ======");
+            return;
+        }
+
+        System.out.println("===== modify! =====");
+
+        while (true) {
+            String whatChange = getUserInput("change");
+
+            if (checkHomeCommand(whatChange)) {
+                return;
+            }
+
+            String checkWhatChange = modifyController.checkWhatChange(whatChange);
+            if (checkWhatChange == null) {
+                System.out.println("===== unknown command! =====");
+                continue;
+            }
+
+            processChange(checkWhatChange);
         }
     }
 
@@ -212,6 +182,54 @@ public class UserView {
                 return true;
             } else {
                 System.out.println("===== PASSWORD does not match! =====");
+            }
+        }
+    }
+
+    // 적절한 처리 메서드 호출을 위한 분기 처리
+    private void processChange(String checkWhatChange) {
+        switch (checkWhatChange) {
+            case "id":
+                System.out.println("===== can't change ID! =====");
+                break;
+
+            case "pw":
+                processPasswordChange();
+                break;
+
+            case "nickname":
+                processNicknameChange();
+                break;
+        }
+    }
+
+    // 비밀번호 변경 처리
+    private void processPasswordChange() {
+        while (true) {
+            String newPassword = getUserInput("new PASSWORD");
+            String checkNewPassword = getUserInput("check new PASSWORD");
+
+            if (modifyController.checkEqualPwAndNewPw(newPassword, checkNewPassword)) {
+                System.out.println("===== success! =====");
+                modifyController.changeUserPw(newPassword);
+                break;
+            } else {
+                System.out.println("===== PASSWORD does not match! =====");
+            }
+        }
+    }
+
+    // 닉네임 변경 처리
+    private void processNicknameChange() {
+        while (true) {
+            String newNickname = getUserInput("new NICKNAME");
+
+            if (modifyController.checkHasNickname(newNickname)) {
+                System.out.println("===== NICKNAME does already exist! =====");
+            } else {
+                System.out.println("===== success! =====");
+                modifyController.changeUserNickname(newNickname);
+                break;
             }
         }
     }
