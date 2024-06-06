@@ -7,10 +7,7 @@ import com.gh.study.user_controller.*;
 import com.gh.study.model.UserModel;
 import com.gh.study.view.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Container {
     public static Scanner scanner;
@@ -31,7 +28,7 @@ public class Container {
     public static ModifyController modifyController;
     //게임 맵
     public static Map<Integer, GameModel> gameModelMap;
-    public static Map<String, GameModel> gameNicknameMap;
+    public static Map<String, List<GameModel>> gameNicknameMap;
     //유저 맵
     public static Map<Integer, UserModel> userModelMap;
     public static Map<String, UserModel> userIdMap;

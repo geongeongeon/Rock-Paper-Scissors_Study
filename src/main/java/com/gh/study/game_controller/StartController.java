@@ -6,6 +6,8 @@ import com.gh.study.session.UserSession;
 import com.gh.study.view.GameView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.gh.study.container.Container.*;
 import static com.gh.study.container.Container.gameNicknameMap;
@@ -53,7 +55,9 @@ public class StartController {
 
         GameModel gameModel = new GameModel(gameNextNo, playNickname, score, playTime);
         gameModelMap.put(gameNextNo, gameModel);
-        gameNicknameMap.put(playNickname, gameModel);
+
+        List<GameModel> playNicknameGameModelList = gameNicknameMap.getOrDefault(playNickname, new ArrayList<>());
+        gameNicknameMap.put(playNickname, playNicknameGameModelList);
 
         App.setGameNextNo(++gameNextNo);
     }
