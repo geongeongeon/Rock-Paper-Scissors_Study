@@ -28,8 +28,10 @@ public class Container {
     public static LoginController loginController;
     public static LogoutController logoutController;
     public static ModifyController modifyController;
-
+    //맵
     public static Map<Integer, UserModel> userModelMap;
+    public static Map<String, UserModel> userIdMap;
+    public static Map<String, UserModel> userNicknameMap;
 
     static {
         scanner = new Scanner(System.in);
@@ -48,7 +50,9 @@ public class Container {
         loginController = new LoginController();
         logoutController = new LogoutController();
         modifyController = new ModifyController();
-
+        //맵
         userModelMap = new HashMap<>();
+        userIdMap = new HashMap<>();
+        userNicknameMap = new HashMap<>();
     }
 }

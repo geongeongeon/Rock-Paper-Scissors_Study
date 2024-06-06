@@ -70,7 +70,7 @@ public class UserView {
 
         Map<String, String> checkIdPwMap = rq.getParams();
 
-        if (!modifyController.checkContainsKeyIdAndPw(checkIdPwMap)) {
+        if (!modifyController.hasIdAndPwKeys(checkIdPwMap)) {
             System.out.println("===== need your ID and PASSWORD! =====");
             return;
         }
@@ -89,7 +89,7 @@ public class UserView {
                 return;
             }
 
-            String checkWhatChange = modifyController.checkWhatChange(whatChange);
+            String checkWhatChange = modifyController.getChangeType(whatChange);
             if (checkWhatChange == null) {
                 System.out.println("===== unknown command! =====");
                 continue;

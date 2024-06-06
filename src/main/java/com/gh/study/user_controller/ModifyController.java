@@ -5,10 +5,10 @@ import com.gh.study.session.UserSession;
 
 import java.util.Map;
 
-import static com.gh.study.container.Container.userModelMap;
+import static com.gh.study.container.Container.userNicknameMap;
 
 public class ModifyController {
-    public boolean checkContainsKeyIdAndPw(Map<String, String> checkIdPwMap) {
+    public boolean hasIdAndPwKeys(Map<String, String> checkIdPwMap) {
         return checkIdPwMap.containsKey("id") && checkIdPwMap.containsKey("pw");
     }
 
@@ -18,7 +18,7 @@ public class ModifyController {
                 checkIdPwMap.get("pw").equals(loginUser.getUserPw());
     }
 
-    public String checkWhatChange(String whatChange) {
+    public String getChangeType(String whatChange) {
         switch (whatChange) {
             case "id":
                 return "id";
@@ -40,16 +40,15 @@ public class ModifyController {
     }
 
     public boolean checkHasNickname(String newNickname) {
-        for(Integer userNo : userModelMap.keySet()) {
-            UserModel user = userModelMap.get(userNo);
-            if(newNickname.equals(user.getUserNickname())) {
-                return true;
-            }
-        }
-        return false;
+        return userNicknameMap.containsKey(newNickname);
     }
 
     public void changeUserNickname(String newNickname) {
-        UserSession.getLoginUser().setUserNickname(newNickname);
+        UserModel loginUser = UserSession.getLoginUser();
+        String oldNickname = loginUser.getUserNickname();
+
+        loginUser.setUserNickname(newNickname);
+        userNicknameMap.remove(oldNickname);
+        userNicknameMap.put(newNickname, loginUser);
     }
 }
