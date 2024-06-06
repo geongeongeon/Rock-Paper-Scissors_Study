@@ -1,6 +1,7 @@
 package com.gh.study.view;
 
 import com.gh.study.model.GameModel;
+import com.gh.study.session.UserSession;
 
 import java.util.List;
 
@@ -10,6 +11,11 @@ public class GameView {
     public static int score;
 
     public void gameStart() {
+        if(!UserSession.getIsLogin()) {
+            System.out.println("===== login first! =====");
+            return;
+        }
+
         System.out.println("===== start! =====");
 
         while(true) {
