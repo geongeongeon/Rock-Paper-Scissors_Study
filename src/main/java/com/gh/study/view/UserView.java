@@ -109,9 +109,10 @@ public class UserView {
     }
 
     public void userList() {
+        System.out.println("===== list! =====");
         List<UserModel> userList = listController.getUserInfo();
         for(UserModel user : userList) {
-            System.out.printf("%d | %s | %s | %s\n", user.getUserNo(), user.getUserId(), user.getUserPw(), user.getUserNickname());
+            System.out.println(user.toString());
         }
     }
 

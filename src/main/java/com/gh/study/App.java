@@ -7,6 +7,7 @@ import static com.gh.study.container.Container.*;
 
 public class App {
     private static int userNextNo;
+    private static int gameNextNo;
 
     public static int getUserNextNo() {
         return userNextNo;
@@ -16,15 +17,27 @@ public class App {
         App.userNextNo = userNextNo;
     }
 
+    public static int getGameNextNo() {
+        return gameNextNo;
+    }
+
+    public static void setGameNextNo(int gameNextNo) {
+        App.gameNextNo = gameNextNo;
+    }
+
     public App() {
         loadTestData();
         UserSession.setLoginUser(userModelMap.get(4)); //자동으로 key가 4인 회원에 로그인
     }
 
     private void loadTestData() {
-       TestDataFactory testDataFactory = new TestDataFactory();
-       testDataFactory.makeTestUser();
-       userNextNo = testDataFactory.getUserLastNo() + 1;
+        TestDataFactory testDataFactory = new TestDataFactory();
+        //게임데이터 생성
+        testDataFactory.makeTestGame();
+        gameNextNo = testDataFactory.getGameLastNo() + 1;
+        //유저데이터 생성
+        testDataFactory.makeTestUser();
+        userNextNo = testDataFactory.getUserLastNo() + 1;
     }
 
     public void run() {

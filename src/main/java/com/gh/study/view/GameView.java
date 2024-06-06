@@ -1,9 +1,14 @@
 package com.gh.study.view;
 
+import com.gh.study.model.GameModel;
+
+import java.util.List;
+
 import static com.gh.study.container.Container.*;
 
 public class GameView {
     public static int score;
+
     public void gameStart() {
         System.out.println("===== start! =====");
 
@@ -19,15 +24,17 @@ public class GameView {
 
                 if(gameResult[1].equals("lose")) {
                     while(true) {
-                        System.out.print("save or restart) ");
+                        System.out.print("/save or /restart) ");
                         String userChoiceAfterLose = scanner.nextLine();
 
                         if(userChoiceAfterLose.equals("/save")) {
+                            System.out.println("===== save! =====");
+                            startController.saveScore(score);
+                            score = 0;
                             return;
                         } else if(userChoiceAfterLose.equals("/restart")) {
-                            System.out.println(score);
-                            score = 0;
                             System.out.println("===== restart! =====");
+                            score = 0;
                             break;
                         } else {
                             System.out.println("===== unknown choice! =====");
@@ -45,6 +52,10 @@ public class GameView {
 
     public void gameRanking() {
         System.out.println("===== ranking! =====");
+        List<GameModel> gameList = rankingController.getGameInfo();
+        for(GameModel game : gameList) {
+            System.out.println(game.toString());
+        }
     }
 
     public void gameExit() {

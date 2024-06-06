@@ -2,6 +2,7 @@ package com.gh.study.container;
 
 import com.gh.study.Rq;
 import com.gh.study.game_controller.*;
+import com.gh.study.model.GameModel;
 import com.gh.study.user_controller.*;
 import com.gh.study.model.UserModel;
 import com.gh.study.view.*;
@@ -28,7 +29,10 @@ public class Container {
     public static LoginController loginController;
     public static LogoutController logoutController;
     public static ModifyController modifyController;
-    //맵
+    //게임 맵
+    public static Map<Integer, GameModel> gameModelMap;
+    public static Map<String, GameModel> gameNicknameMap;
+    //유저 맵
     public static Map<Integer, UserModel> userModelMap;
     public static Map<String, UserModel> userIdMap;
     public static Map<String, UserModel> userNicknameMap;
@@ -50,7 +54,10 @@ public class Container {
         loginController = new LoginController();
         logoutController = new LogoutController();
         modifyController = new ModifyController();
-        //맵
+        //게임 맵
+        gameModelMap = new HashMap<>();
+        gameNicknameMap = new HashMap<>();
+        //유저 맵
         userModelMap = new HashMap<>();
         userIdMap = new HashMap<>();
         userNicknameMap = new HashMap<>();

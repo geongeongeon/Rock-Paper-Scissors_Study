@@ -1,9 +1,14 @@
 package com.gh.study.game_controller;
 
+import com.gh.study.App;
+import com.gh.study.model.GameModel;
+import com.gh.study.session.UserSession;
 import com.gh.study.view.GameView;
 
-import static com.gh.study.container.Container.gameView;
-import static com.gh.study.container.Container.random;
+import java.time.LocalDateTime;
+
+import static com.gh.study.container.Container.*;
+import static com.gh.study.container.Container.gameNicknameMap;
 
 public class StartController {
     public String[] gameResult(String userChoice) {
@@ -31,13 +36,29 @@ public class StartController {
         if((userChoice.equals("rock") && computerChoice.equals("scissor")) ||
                 (userChoice.equals("scissor") && computerChoice.equals("paper")) ||
                 (userChoice.equals("paper") && computerChoice.equals("rock"))) {
-            GameView.score += 100;
+            GameView.score += 1000;
             return "win";
         } else if(userChoice.equals(computerChoice)) {
-            GameView.score += 30;
+            GameView.score += 300;
             return "draw";
         } else {
             return "lose";
         }
+    }
+
+    public void saveScore(int score) {
+        int gameNextNo = App.getGameNextNo();
+        String playNickname = getPlayUserNickname();
+        LocalDateTime playTime = LocalDateTime.now();
+
+        GameModel gameModel = new GameModel(gameNextNo, playNickname, score, playTime);
+        gameModelMap.put(gameNextNo, gameModel);
+        gameNicknameMap.put(playNickname, gameModel);
+
+        App.setGameNextNo(++gameNextNo);
+    }
+
+    private String getPlayUserNickname() {
+        return UserSession.getLoginUser().getUserNickname();
     }
 }
