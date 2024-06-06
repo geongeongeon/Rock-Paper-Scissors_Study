@@ -18,16 +18,20 @@ public class GameView {
                 System.out.printf("===== %s! =====\n", gameResult[1]);
 
                 if(gameResult[1].equals("lose")) {
-                    System.out.print("/home or /restart) ");
-                    String userChoiceAfterLose = scanner.nextLine();
+                    while(true) {
+                        System.out.print("/home or /restart) ");
+                        String userChoiceAfterLose = scanner.nextLine();
 
-                    if(userChoiceAfterLose.equals("/home")) {
-                        return;
-                    } else if(userChoiceAfterLose.equals("/restart")) {
-                        System.out.println(score);
-                        score = 0;
-                    } else {
-                        System.out.println("===== unknown choice! =====");
+                        if(userChoiceAfterLose.equals("/home")) {
+                            return;
+                        } else if(userChoiceAfterLose.equals("/restart")) {
+                            System.out.println(score);
+                            score = 0;
+                            System.out.println("===== restart! =====");
+                            break;
+                        } else {
+                            System.out.println("===== unknown choice! =====");
+                        }
                     }
                 }
             } else if(userChoice.equals("/stop")) {
