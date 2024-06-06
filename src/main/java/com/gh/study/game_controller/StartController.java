@@ -1,5 +1,8 @@
 package com.gh.study.game_controller;
 
+import com.gh.study.view.GameView;
+
+import static com.gh.study.container.Container.gameView;
 import static com.gh.study.container.Container.random;
 
 public class StartController {
@@ -12,7 +15,6 @@ public class StartController {
 
     private String getComputerChoice() {
         int randomNumber = random.nextInt(3) + 1;
-
         switch(randomNumber) {
             case 1 :
                 return "rock";
@@ -29,8 +31,10 @@ public class StartController {
         if((userChoice.equals("rock") && computerChoice.equals("scissor")) ||
                 (userChoice.equals("scissor") && computerChoice.equals("paper")) ||
                 (userChoice.equals("paper") && computerChoice.equals("rock"))) {
+            GameView.score += 100;
             return "win";
         } else if(userChoice.equals(computerChoice)) {
+            GameView.score += 30;
             return "draw";
         } else {
             return "lose";
