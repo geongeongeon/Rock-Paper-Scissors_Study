@@ -19,10 +19,10 @@ public class GameView {
 
                 if(gameResult[1].equals("lose")) {
                     while(true) {
-                        System.out.print("/home or /restart) ");
+                        System.out.print("save or restart) ");
                         String userChoiceAfterLose = scanner.nextLine();
 
-                        if(userChoiceAfterLose.equals("/home")) {
+                        if(userChoiceAfterLose.equals("/save")) {
                             return;
                         } else if(userChoiceAfterLose.equals("/restart")) {
                             System.out.println(score);
