@@ -28,7 +28,7 @@ public class Container {
     public static ModifyController modifyController;
     //게임 맵
     public static Map<Integer, GameModel> gameModelMap;
-    public static Map<String, List<GameModel>> gameNicknameMap;
+    public static LinkedHashMap<String, List<GameModel>> gameNicknameMap;
     //유저 맵
     public static Map<Integer, UserModel> userModelMap;
     public static Map<String, UserModel> userIdMap;
@@ -53,7 +53,7 @@ public class Container {
         modifyController = new ModifyController();
         //게임 맵
         gameModelMap = new HashMap<>();
-        gameNicknameMap = new HashMap<>();
+        gameNicknameMap = new LinkedHashMap<>();
         //유저 맵
         userModelMap = new HashMap<>();
         userIdMap = new HashMap<>();

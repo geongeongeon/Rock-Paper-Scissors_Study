@@ -1,6 +1,7 @@
 package com.gh.study.view;
 
 import com.gh.study.model.GameModel;
+import com.gh.study.model.UserModel;
 import com.gh.study.session.UserSession;
 
 import java.util.List;
@@ -62,6 +63,11 @@ public class GameView {
         for(GameModel game : gameList) {
             System.out.println(game.toString());
         }
+        System.out.println("===== testNickname4! =====");
+        for(GameModel game : gameNicknameMap.get("testNickname4")) {
+            System.out.println(game);
+        }
+
     }
 
     public void gameExit() {

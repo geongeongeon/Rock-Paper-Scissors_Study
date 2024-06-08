@@ -57,6 +57,7 @@ public class StartController {
         gameModelMap.put(gameNextNo, gameModel);
 
         List<GameModel> playNicknameGameModelList = gameNicknameMap.getOrDefault(playNickname, new ArrayList<>());
+        playNicknameGameModelList.add(gameModel);
         gameNicknameMap.put(playNickname, playNicknameGameModelList);
 
         App.setGameNextNo(++gameNextNo);
