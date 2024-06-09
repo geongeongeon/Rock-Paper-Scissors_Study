@@ -3,6 +3,8 @@ package com.gh.study.view;
 import com.gh.study.model.GameModel;
 import com.gh.study.session.UserSession;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +65,12 @@ public class GameView {
             if(!checkNicknameMap.isEmpty()) {
                 String nicknameParam = checkNicknameMap.get("nickname");
                 System.out.println("===== show score : " + nicknameParam + " =====");
-                for(GameModel game : gameNicknameMap.get(nicknameParam)) {
+                List<GameModel> sortedList = new ArrayList<>();
+                for(GameModel sort : gameNicknameMap.get(nicknameParam)) {
+                    sortedList.add(sort);
+                }
+                sortedList.sort(Comparator.comparingInt(GameModel :: getPlayScore).reversed());
+                for(GameModel game : sortedList) {
                     System.out.println(game);
                 }
             } else {
