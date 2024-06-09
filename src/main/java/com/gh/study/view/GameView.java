@@ -1,10 +1,10 @@
 package com.gh.study.view;
 
 import com.gh.study.model.GameModel;
-import com.gh.study.model.UserModel;
 import com.gh.study.session.UserSession;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.gh.study.container.Container.*;
 
@@ -27,7 +27,7 @@ public class GameView {
                 String[] gameResult = startController.gameResult(userChoice);
 
                 System.out.println("computer) " + gameResult[0]);
-                System.out.printf("===== %s! =====\n", gameResult[1]);
+                System.out.println("===== " + gameResult[1] + " =====");
 
                 if(gameResult[1].equals("lose")) {
                     while(true) {
@@ -48,8 +48,8 @@ public class GameView {
                         }
                     }
                 }
-            } else if(userChoice.equals("/stop")) {
-                System.out.println("===== stop! =====");
+            } else if(userChoice.equals("/home")) {
+                System.out.println("===== home! =====");
                 return;
             } else {
                 System.out.println("===== unknown choice! =====");
@@ -58,16 +58,26 @@ public class GameView {
     }
 
     public void gameRanking() {
-        System.out.println("===== ranking! =====");
-        List<GameModel> gameList = rankingController.getGameInfo();
-        for(GameModel game : gameList) {
-            System.out.println(game.toString());
+        try {
+            Map<String, String> checkNicknameMap = rq.getParams();
+            if(!checkNicknameMap.isEmpty()) {
+                String nicknameParam = checkNicknameMap.get("nickname");
+                System.out.println("===== show score : " + nicknameParam + " =====");
+                for(GameModel game : gameNicknameMap.get(nicknameParam)) {
+                    System.out.println(game);
+                }
+            } else {
+                System.out.println("===== ranking! =====");
+                List<GameModel> gameList = rankingController.getGameInfo();
+                for(GameModel game : gameList) {
+                    System.out.println(game.toString());
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("===== need a NICKNAME! =====");
+        } catch (NullPointerException e) {
+            System.out.println("===== not found data! =====");
         }
-        System.out.println("===== testNickname4! =====");
-        for(GameModel game : gameNicknameMap.get("testNickname4")) {
-            System.out.println(game);
-        }
-
     }
 
     public void gameExit() {
